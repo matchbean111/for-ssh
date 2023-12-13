@@ -49,7 +49,7 @@ void printString(String *s){
     printf("\n");
 }
 
-void forceMatch(String* master, String* sub){
+void bruteMatch(String* master, String* sub){
     int i = 0;
     int j = 0;
     while (i < master->len && j < sub->len){
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     stringAssign(s1, argv[2]);
     printString(s);
 
-    forceMatch(s,s1);
+    bruteMatch(s,s1);
 
 
     return 0;
