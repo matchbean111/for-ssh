@@ -44,8 +44,27 @@ void inThreadTree(TreeNode* T, TreeNode** pre){
             T->ltag = 1;
             T->lchild = *pre;
         }
-        if (*pre != NULL && )
+        if (*pre != NULL && (*pre)->rchild == NULL){
+            (*pre)->rtag = 1;
+            (*pre)->rchild = T;
+        }
+        *pre = T;
         inThreadTree(T->rchild,pre);
+    }
+}
+
+TreeNode *getFirst(TreeNode *T){
+    while (T->ltag == 0){
+        T = T->lchild;
+    }
+    return T;
+}
+
+TreeNode *getNext(TreeNode *T){
+    if (T->rtag == 1){
+        return T->rchild;
+    }else {
+        return getFirst(T->rchild);
     }
 }
 
@@ -56,12 +75,16 @@ StackNode *initStack() {
     return S;
 }
 
+
+
 int main(int argc, char* argv[]) {
     TreeNode *T;
+    TreeNode *pre = NULL;
     int index = 0;
     createTree(&T,argv[1],&index);
-
-
+    inThreadTree(T,&pre);
+    pre->rtag = 1;
+    pre->rchild = NULL;
 
     return 0;
 }
