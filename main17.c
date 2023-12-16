@@ -1,80 +1,110 @@
-//
-// Created by ge on 2023/12/13.
-//
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- *      AVL
- */
-
-
 typedef struct TreeNode {
     int data;
-    int h;
-    struct TreeNode *lchild;
-    struct TreeNode *rchild;
-} TreeNode;
+    int height;
+    struct TreeNode* lchild;
+    struct TreeNode* rchild;
+}TreeNode;
 
-int getH(TreeNode *node) {
-    return node ? node->h : 0;
+int getHeight(TreeNode* node){
+    return node ? node->height : 0;
 }
 
-void rrRotation(TreeNode *node, TreeNode* root){
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+void rrRotation(TreeNode* node, TreeNode** root){
     TreeNode *temp = node->rchild;
     node->rchild = temp->lchild;
+    temp->lchild = node;
+    node->height = max(getHeight(node->lchild), getHeight(node->rchild)) + 1;
+    temp->height = max(getHeight(temp->lchild), getHeight(temp->rchild)) + 1;
+    *root = temp;
 }
 
-void avlInsert(TreeNode **T, int data) {
+void llRotation(TreeNode* node, TreeNode** root){
+    TreeNode *temp = node->lchild;
+    node->lchild = temp->rchild;
+    temp->rchild = node;
+    node->height = max(getHeight(node->lchild), getHeight(node->rchild)) + 1;
+    temp->height = max(getHeight(temp->lchild), getHeight(temp->rchild)) + 1;
+    *root = temp;
+}
+
+
+//void lrRotation(TreeNode* node, TreeNode** root){
+//    rrRotation(node->rchild, &(node->rchild));
+//    llRotation(node,root);
+//}
+//
+//void rlRotation(TreeNode* node, TreeNode** root){
+//    llRotation(node->lchild, &(node->lchild));
+//    rrRotation(node,root);
+//}
+
+
+void avlInsert(TreeNode** T, int data){
     if (*T == NULL) {
-        *T = (TreeNode *) malloc(sizeof(TreeNode));
+        *T = (TreeNode*) malloc(sizeof(TreeNode));
         (*T)->data = data;
-        (*T)->h = 0;
+        (*T)->height = 0;
         (*T)->lchild = NULL;
         (*T)->rchild = NULL;
-    } else if (data < (*T)->data) {
+    }else if (data < (*T)->data){
         avlInsert(&(*T)->lchild, data);
-        int lH = getH((*T)->lchild);
-        int rH = getH((*T)->rchild);
-        if (data < (*T)->lchild->data){
-            // LL
-
-        } else {
-            // LR
+        // 调整
+        int leftHeight = getHeight((*T)->lchild);
+        int rightHeight = getHeight((*T)->rchild);
+        // 判断高度差
+        if (leftHeight - rightHeight == 2){
+            if (data < (*T)->lchild->data){
+                // LL
+                llRotation(*T, T);
+            }else {
+                // LR
+                rrRotation((*T)->lchild, &(*T)->lchild);
+                llRotation(*T,T);
+            }
         }
-    } else {
-        avlInsert(&(*T)->rchild, data);
-        avlInsert(&(*T)->lchild, data);
-        int lH = getH((*T)->lchild);
-        int rH = getH((*T)->rchild);
-        if (data > (*T)->lchild->data){
-            // RR
 
-        } else {
-            // RL
+    }else if (data > (*T)->data){
+        avlInsert(&(*T)->rchild,data);
+        int leftHeight = getHeight((*T)->lchild);
+        int rightHeight = getHeight((*T)->rchild);
+        // 判断高度差
+        if (rightHeight - leftHeight == 2){
+            if (data > (*T)->rchild->data){
+                // RR
+                rrRotation(*T,T);
+            }else {
+                // RL
+                llRotation((*T)->rchild, &(*T)->rchild);
+                rrRotation(*T,T);
+            }
         }
+
     }
+    (*T)->height = max(getHeight((*T)->lchild), getHeight((*T)->rchild)) + 1;
 }
 
-void preOrder(TreeNode *T) {
+void inOrder(TreeNode *T){
     if (T) {
-
-        preOrder(T->lchild);
-        printf("%d ", T->data);
-        preOrder(T->rchild);
+        printf("%d ",T->data);
+        inOrder(T->lchild);
+        inOrder(T->rchild);
     }
-
 }
 
 int main() {
     TreeNode *T = NULL;
-    int nums[5] = {1, 2, 3, 4, 5};
-
-    for (int i = 0; i < 5; ++i) {
+    int nums[5] = {1,8,6,7,10};
+    for (int i = 0; i < 5; ++i){
         avlInsert(&T, nums[i]);
     }
-
-    preOrder(T);
+    inOrder(T);
 }
 
 
