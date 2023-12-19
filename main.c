@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "MemoryLeak"
 typedef struct Node
 {
     int data;
@@ -89,5 +87,3 @@ int main() {
     printList(list);
     return 0;
 }
-
-#pragma clang diagnostic pop

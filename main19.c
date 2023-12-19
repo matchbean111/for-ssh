@@ -6,13 +6,6 @@
 
 #define MAXSIZE 5
 
-typedef struct Graph {
-    char *vexs;
-    int **arcs;
-    int vexNum;
-    int arcNum;
-} Graph;
-
 typedef struct Queue {
     int front;
     int rear;
@@ -41,35 +34,43 @@ int isEmpty(Queue *Q) {
     }
 }
 
-int enQueue(Queue* Q, int data){
-    if (isFull(Q)){
+int enQueue(Queue *Q, int data) {
+    if (isFull(Q)) {
         return 0;
-    }else {
+    } else {
         Q->data[Q->rear] = data;
         Q->rear = (Q->rear + 1) % MAXSIZE;
         return 1;
     }
 }
 
-int deQueue(Queue* Q){
+int deQueue(Queue *Q) {
     if (isEmpty(Q)) {
         return -1;
-    }else {
-        int data = Q->data[Q->rear];
-        Q->front = (Q->front+1)%MAXSIZE;
+    } else {
+        int data = Q->data[Q->front];
+        Q->front = (Q->front + 1) % MAXSIZE;
         return data;
     }
 }
 
 
+typedef struct Graph {
+    char *vexs;
+    int **arcs;
+    int vexNum;
+    int arcNum;
+} Graph;
+
+
+
 Graph *initGraph(int vexNum) {
     Graph *G = (Graph *) malloc(sizeof(Graph));
     G->vexs = (char *) malloc(sizeof(char) * vexNum);
-    G->arcs = (int *) malloc(sizeof(int *) * vexNum);
+    G->arcs = (int **) malloc(sizeof(int *) * vexNum);
     for (int i = 0; i < vexNum; i++) {
         G->arcs[i] = (int *) malloc(sizeof(int) * vexNum);
     }
-
     G->vexNum = vexNum;
     G->arcNum = 0;
     return G;
@@ -98,16 +99,16 @@ void DFS(Graph *G, int *visited, int vexIndex) {
     }
 }
 
-void BFS(Graph* G, int* visited, int vexIndex){
+void BFS(Graph *G, int *visited, int index) {
     Queue *Q = initQueue();
-    printf("%c\t", G->vexs[vexIndex]);
-    visited[vexIndex] = 1;
+    printf("%c\t", G->vexs[index]);
+    visited[index] = 1;
 
-    enQueue(Q, vexIndex);
-    while (!isEmpty(Q)){
+    enQueue(Q, index);
+    while (!isEmpty(Q)) {
         int i = deQueue(Q);
         for (int j = 0; j < G->vexNum; j++) {
-            if (G->arcs[vexIndex][i] == 1 && !visited[vexIndex]){
+            if (G->arcs[i][j] == 1 && !visited[j]){
                 printf("%c\t", G->vexs[j]);
                 visited[j] = 1;
                 enQueue(Q,j);
@@ -116,9 +117,7 @@ void BFS(Graph* G, int* visited, int vexIndex){
     }
 }
 
-void BFS()
-
-        int main() {
+int main() {
     Graph *G = initGraph(5);
     int *visited = malloc(sizeof(int) * G->vexNum);
     for (int i = 0; i < G->vexNum; i++) {
@@ -131,6 +130,10 @@ void BFS()
             1, 1, 0, 0, 1,
             0, 1, 0, 1, 0
     };
-    createGraph(G, "ABCDE", arcs);
-    DFS(G, visited, 0);
+    createGraph(G, "ABCDE", (int*)arcs);
+//    DFS(G, visited, 0);
+    printf("jjjjjjjjjjjjj\n");
+    BFS(G,visited,1);
 }
+
+

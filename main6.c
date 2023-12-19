@@ -65,9 +65,7 @@ void printQueue(Queue *Q) {
 int main() {
     Queue * Q = initQueue();
     enQueue(Q,1);
-    enQueue(Q,2);
-    enQueue(Q,3);
-    enQueue(Q,4);
+    enQueue(Q,12);
 
     deQueue(Q);
     printQueue(Q);
