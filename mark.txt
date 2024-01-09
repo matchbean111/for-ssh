@@ -1,0 +1,7 @@
+"Alice" 88 98 90
+"Cindy" 82 92 80
+"Harry" 87 90 89
+"Mickey" 62 73 89
+"Peter" 59 68 98
+"Lucy" 87 90 89
+"Bruce" 90 99 100
