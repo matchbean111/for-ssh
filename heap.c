@@ -52,15 +52,21 @@ void printArr(int arr[], int len) {
     for (int i = 0; i < len; i++) {
         printf("%d\t", arr[i]);
     }
+    printf("\n");
 }
-
-
 
 int main() {
     int arr[] = {6,5,1,2,3,8,9,4,7};
+    int tree[] = {4,3,5,1,10,2};
 
-    heap_sort(arr,9);
+    build_heap(arr,9);
     printArr(arr, 9);
+
+    build_heap(tree,6);
+    printArr(tree, 6);
+
+    heap_sort(tree, 6);
+    printArr(tree,6);
 
     return 0;
 }

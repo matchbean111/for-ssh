@@ -17,8 +17,6 @@ int findMaxPos(int arr[], int n){
 
 void selectionSort(int arr[], int n){
     while (n>1) {
-
-
         int pos = findMaxPos(arr, n);
         int temp = arr[pos];
         arr[pos] = arr[n - 1];
